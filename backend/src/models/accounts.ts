@@ -6,6 +6,7 @@ export type IAccount = {
   _id?: AccountBaseSchema["id"];
   userId: AccountBaseSchema["userId"];
   name: AccountBaseSchema["name"];
+  balance: AccountBaseSchema["balance"];
   __v?: number;
 }
 const accountSchema = new Schema<IAccount>({
@@ -20,6 +21,15 @@ const accountSchema = new Schema<IAccount>({
     uppercase: true,
     min: 3,
     required: true
+  },
+  balance: {
+    type: Number,
+    default: 0,
+    required: true,
+    validate: {
+      validator: Number.isInteger,
+      message: "Amount must be stored as integer"
+    }
   }
 });
 

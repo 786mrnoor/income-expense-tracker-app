@@ -24,7 +24,7 @@ export const transactionBaseSchema = z.object({
     .trim().min(3, "Description must be at least 3 characters long")
     .max(500, "Description must be at most 500 characters long"),
 
-  date: z.coerce.date("Please enter a valid date").default(new Date()),
+  date: z.coerce.date("Please enter a valid date").default(() => new Date()),
 });
 
 export type TransactionBaseSchema = z.infer<typeof transactionBaseSchema>;

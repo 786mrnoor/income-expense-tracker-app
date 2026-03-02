@@ -10,6 +10,8 @@ export const accountBaseSchema = z.object({
   name: z.string("Please enter your account name")
     .trim().toUpperCase()
     .min(3, "Name must be at least 3 characters long"),
+  
+  balance: z.int("Please enter a valid amount")
 });
 
 export type AccountBaseSchema = z.infer<typeof accountBaseSchema>;

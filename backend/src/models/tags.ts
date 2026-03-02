@@ -6,6 +6,7 @@ export type ITag = {
   _id?: TagBaseSchema["id"];
   userId: TagBaseSchema["userId"];
   name: TagBaseSchema["name"];
+  balance: TagBaseSchema["balance"];
   __v?: number;
 }
 const tagSchema = new Schema<ITag>({
@@ -20,6 +21,15 @@ const tagSchema = new Schema<ITag>({
     uppercase: true,
     min: 3,
     required: true
+  },
+  balance: {
+    type: Number,
+    default: 0,
+    required: true,
+    validate: {
+      validator: Number.isInteger,
+      message: "Amount must be stored as integer"
+    }
   }
 });
 
