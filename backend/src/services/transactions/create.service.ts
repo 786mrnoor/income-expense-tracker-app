@@ -37,7 +37,7 @@ export default async function createTransactionService(userId: UserBaseSchema["i
       await transaction.save({ session });
     });
   } finally {
-    mongoSession.endSession();
+    await mongoSession.endSession();
   }
   return response(201, transaction, "Transaction created successfully");
 };

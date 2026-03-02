@@ -32,7 +32,7 @@ export async function getTransactionController(req: ValidatedRequest<GetTransact
 }
 
 export async function updateTransactionController(req: ValidatedRequest<UpdateTransactionSchema>, res: Response) {
-  const result = await updateTransactionService(req.user!.id, req.params, req.body);
+  const result = await updateTransactionService(req.user!.id, req.params.id, req.body);
 
   sendResponse(res, result);
 }
