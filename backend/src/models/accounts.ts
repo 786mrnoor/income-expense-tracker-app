@@ -6,7 +6,7 @@ export type IAccount = {
   _id?: AccountBaseSchema["id"];
   userId: AccountBaseSchema["userId"];
   name: AccountBaseSchema["name"];
-  balance: AccountBaseSchema["balance"];
+  balance?: AccountBaseSchema["balance"];
   __v?: number;
 }
 const accountSchema = new Schema<IAccount>({

@@ -6,7 +6,7 @@ export type ITag = {
   _id?: TagBaseSchema["id"];
   userId: TagBaseSchema["userId"];
   name: TagBaseSchema["name"];
-  balance: TagBaseSchema["balance"];
+  balance?: TagBaseSchema["balance"];
   __v?: number;
 }
 const tagSchema = new Schema<ITag>({
