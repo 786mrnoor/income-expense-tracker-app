@@ -13,6 +13,9 @@ export type RequestZodSchema = z.ZodObject<RequestZodShape>;
 export type ValidatedRequest<T extends RequestShape = {}> = Request<
   T extends { params: infer P } ? P : any,
   unknown,
-  T extends { body: infer B } ? B : any,
-  T extends { query: infer Q } ? Q : any
->;
+  T extends { body: infer B } ? B : any
+// T extends { query: infer Q } ? Q : any
+> & {
+  // Add your custom sanitized property
+  sanitizedQuery?: T extends { query: infer Q } ? Q : any;
+};

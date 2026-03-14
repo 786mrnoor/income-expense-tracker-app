@@ -70,9 +70,9 @@ const transactionSchema = new Schema<ITransaction>({
     default: Date.now,
     required: true
   }
-});
+}, { timestamps: true });
 
-transactionSchema.index({ userId: 1, accountId: 1, date: -1 });
+transactionSchema.index({ userId: 1, date: -1 });
 
 transactionSchema.plugin(toJSONPlugin);
 

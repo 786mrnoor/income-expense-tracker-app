@@ -9,8 +9,9 @@ import { transactionRouter } from './routes/transactions.routes.js';
 
 export const app = express();
 
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS!.split(',');
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ALLOWED_ORIGINS,
   credentials: true,
 }));
 

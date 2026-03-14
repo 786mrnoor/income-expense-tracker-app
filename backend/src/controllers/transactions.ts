@@ -3,6 +3,7 @@ import type { ValidatedRequest } from "@/types/validation.js";
 import { sendResponse } from "@/utils/appResponse.js";
 
 import type { CreateTransactionSchema } from "@/schema/transactions/create.js";
+import type { GetAllTransactionSchema } from "@/schema/transactions/getAll.js";
 import type { DeleteTransactionSchema } from "@/schema/transactions/delete.js";
 import type { GetTransactionSchema } from "@/schema/transactions/get.js";
 import type { UpdateTransactionSchema } from "@/schema/transactions/update.js";
@@ -19,8 +20,8 @@ export async function createTransactionController(req: ValidatedRequest<CreateTr
   sendResponse(res, result);
 }
 
-export async function getAllTransactionController(req: ValidatedRequest, res: Response) {
-  const result = await getAllTransactionService(req.user!.id);
+export async function getAllTransactionController(req: ValidatedRequest<GetAllTransactionSchema>, res: Response) {
+  const result = await getAllTransactionService(req.user!.id, req.sanitizedQuery!);
 
   sendResponse(res, result);
 }

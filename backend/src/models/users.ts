@@ -30,7 +30,7 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: true,
   }
-});
+}, { timestamps: true });
 
 userSchema.plugin(toJSONPlugin); // remove __v and _id
 

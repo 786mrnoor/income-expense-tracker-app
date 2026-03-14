@@ -31,7 +31,7 @@ const accountSchema = new Schema<IAccount>({
       message: "Amount must be stored as integer"
     }
   }
-});
+}, { timestamps: true });
 
 accountSchema.plugin(toJSONPlugin); // remove __v and _id
 

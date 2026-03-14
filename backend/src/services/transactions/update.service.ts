@@ -96,5 +96,5 @@ export default async function updateTransactionService(
     await session.endSession();
   }
 
-  return response(200, updatedTransaction, "Transaction udpated successfully");
+  return response(200, updatedTransaction, "Transaction updated successfully");
 };

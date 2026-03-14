@@ -31,7 +31,7 @@ const tagSchema = new Schema<ITag>({
       message: "Amount must be stored as integer"
     }
   }
-});
+}, { timestamps: true });
 
 tagSchema.plugin(toJSONPlugin); // remove __v and _id
 
