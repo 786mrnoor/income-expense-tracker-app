@@ -1,0 +1,21 @@
+.topNav {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 10px;
+  margin-bottom: 7px;
+  padding: 0 3%;
+  position: relative;
+  /* background-color: #1d5c88; */
+  height: 70px;
+
+  img {
+    height: 50px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+    object-fit: cover;
+    margin-left: auto;
+  }
+}

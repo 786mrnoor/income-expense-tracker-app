@@ -1,0 +1,18 @@
+.tagListItem {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+
+  span {
+    font-size: .75rem;
+  }
+
+  .balance {
+    margin: 0;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background-color: var(--bs-success);
+    color: var(--bs-light);
+  }
+}

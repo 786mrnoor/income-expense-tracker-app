@@ -1,0 +1,35 @@
+.summary {
+  display: flex;
+  overflow: auto;
+
+  list-style-type: none;
+  margin-top: 1rem;
+  margin-inline: 1rem;
+  padding: 0;
+  background-color: var(--bs-gray-200);
+  border-radius: .5rem;
+}
+
+.summary li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: .5rem;
+  white-space: nowrap;
+
+  &:not(:last-child) {
+    border-right: 1px solid var(--bs-gray-400);
+  }
+
+  p {
+    text-align: center;
+    margin: 0;
+    font-size: .9rem;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+}
