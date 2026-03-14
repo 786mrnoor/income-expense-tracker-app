@@ -1,6 +1,8 @@
+import { lazy } from "react";
 import { Route } from "react-router";
-import Login from "./login/page";
-import Signup from "./signup/page";
+
+const Login = lazy(() => import("./login/page"));
+const Signup = lazy(() => import("./signup/page"));
 
 export const PublicRoutes =
   <Route path="/">

@@ -1,11 +1,13 @@
+import { lazy } from "react";
 import { Route } from "react-router";
-import AuthLayout from "./layout";
-import { Providers } from "./providers";
-import Index from "./index/page";
-import AddTransactionPage from "./add-transaction/page";
-import EditTransactionPage from "./edit-transaction/page";
-import TagPage from "./tags/page";
-import AccountPage from "./accounts/page";
+
+const AuthLayout = lazy(() => import("./layout"));
+const Providers = lazy(() => import("./providers"))
+const Index = lazy(() => import("./index/page"));
+const AddTransactionPage = lazy(() => import("./add-transaction/page"));
+const EditTransactionPage = lazy(() => import("./edit-transaction/page"));
+const TagPage = lazy(() => import("./tags/page"));
+const AccountPage = lazy(() => import("./accounts/page"));
 
 export const AuthRoutes =
   <Route path="/"
