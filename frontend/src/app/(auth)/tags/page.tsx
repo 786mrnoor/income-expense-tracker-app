@@ -9,6 +9,8 @@ import { api } from '@/api';
 import Summary from './components/summary/summary';
 import { selectTags, selectTagsLoading } from '@/redux/tag/tag.selectors';
 import { removeTag } from '@/redux/tag/tag.slice';
+import { confirm } from '@/components/toasts/confirm/confirm';
+import toast from 'react-hot-toast';
 
 export default function TagPage() {
   const [edit, setEdit] = useState<TagBaseSchema | null>(null);
@@ -19,16 +21,21 @@ export default function TagPage() {
   const dispatch = useAppDispatch();
 
   const handleDelete = useCallback(async (id: TagBaseSchema["id"]) => {
-    if (window.confirm('Are You Sure You Want To Delete This Tag!')) {
+    const confirmed = await confirm({
+      title: 'Delete Tag',
+      message: 'Are you sure you want to delete this tag?',
+    });
+
+    if (confirmed) {
       try {
         setLoading(true);
         await api.tags.delete(id);
         dispatch(removeTag(id));
-        window.alert('Deleted Successfully');
+        toast.success('Tag deleted successfully.');
       } catch (error: any) {
         console.error(error);
         if (error.message) {
-          window.alert(error.message);
+          toast.error(error.message);
         }
       } finally {
         setLoading(false);

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useAppDispatch } from '@/redux/hooks';
 import { api } from '@/api';
 import { addTag, updateTag } from '@/redux/tag/tag.slice';
+import toast from 'react-hot-toast';
 
 type FormProps = {
   tag: TagBaseSchema | null;
@@ -42,9 +43,11 @@ function Form({ tag, onUpdated }: FormProps) {
           id: data.id,
           changes: data
         }));
+        toast.success('Tag updated successfully.');
       } else {
         const data = await api.tags.add({ name });
         dispatch(addTag(data));
+        toast.success('Tag added successfully.');
       }
 
       handleReset();

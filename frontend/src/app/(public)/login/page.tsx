@@ -11,16 +11,13 @@ import { setAccessToken } from '@/lib/token';
 import applyBackendErrors from '@/utils/apply-backend-errors';
 import { loginResponseSchema } from '@/schemas/auth/response.login.schema';
 import { customFetch } from '@/utils/custom-fetch';
+import toast from 'react-hot-toast';
 
 export default function Login() {
   useTitle('Login');
 
   const navigate = useNavigate();
   const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<LoginSchema>({
-    defaultValues: {
-      email: "786mrnoor@gmail.com",
-      password: 'Noor@123'
-    },
     resolver: zodResolver(loginSchema)
   });
 
@@ -34,8 +31,9 @@ export default function Login() {
         credentials: "include"
       });
 
-      setAccessToken(data?.accessToken)
-      navigate('/')
+      setAccessToken(data?.accessToken);
+      navigate('/');
+      toast.success('Logged in successfully.');
     } catch (err: any) {
       console.error(err);
       applyBackendErrors(err, setError);

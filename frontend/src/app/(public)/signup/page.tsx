@@ -10,16 +10,12 @@ import applyBackendErrors from '@/utils/apply-backend-errors';
 import { useNavigate } from 'react-router'
 import { customFetch } from '@/utils/custom-fetch';
 import { signupResponseSchema } from '@/schemas/auth/response.signup.schema';
+import toast from 'react-hot-toast';
 export default function Signup() {
   useTitle('Login');
 
   const navigate = useNavigate();
   const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<SignupSchema>({
-    defaultValues: {
-      name: "Noor",
-      email: "786mrnoor@gmail.com",
-      password: 'Noor@123'
-    },
     resolver: zodResolver(signupSchema)
   });
 
@@ -32,7 +28,7 @@ export default function Signup() {
         body: formData,
       });
       navigate('/login');
-
+      toast.success('Signup successful.');
     } catch (err: any) {
       console.error(err);
       applyBackendErrors(err, setError);
@@ -66,9 +62,9 @@ export default function Signup() {
 
         </main>
         <footer>
-          <button type="submit">Login</button>
+          <button type="submit">Signup</button>
           <p>
-            Don't have an account? <NavLink to="/signup">Signup</NavLink>
+            Already have an account? <NavLink to="/login">Login</NavLink>
           </p>
         </footer>
       </form>

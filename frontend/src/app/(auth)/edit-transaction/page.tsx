@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/api';
 import { useParams } from 'react-router';
 import { transactionBaseSchema, type TransactionBaseSchema } from '@/schemas/transactions/base.schema';
+import toast from 'react-hot-toast';
 
 export default function EditTransactionPage() {
   useTitle('Add Transaction');
@@ -50,6 +51,7 @@ export default function EditTransactionPage() {
 
     try {
       await api.transactions.update(transaction?.id, body);
+      toast.success('Transaction updated successfully.');
     } catch (error) {
       console.error(error);
     }

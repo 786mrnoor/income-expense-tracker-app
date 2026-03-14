@@ -29,5 +29,6 @@ export async function authFetch<T extends z.ZodTypeAny | undefined>(config: Fetc
         response: config.response,
       });
     }
+    throw error;
   }
 }

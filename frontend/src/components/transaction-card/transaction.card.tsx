@@ -10,6 +10,8 @@ import { api } from '@/api'
 import { useAppDispatch } from '@/redux/hooks'
 import { removeTransaction } from '@/redux/transaction/transaction.slice'
 import { useNavigate } from 'react-router'
+import { confirm } from '../toasts/confirm/confirm'
+import toast from 'react-hot-toast'
 
 type TransactionCardProps = {
   data: TransactionBaseSchema,
@@ -22,9 +24,15 @@ export function TransactionCard({ data, tagName, accountName }: TransactionCardP
 
   async function deleteTransaction(id: TransactionBaseSchema["id"]) {
     try {
-      if (window.confirm('Are You Sure, You Want To Delete This Transaction!')) {
+      const confirmed = await confirm({
+        title: 'Delete Transaction',
+        message: 'Are You Sure, You Want To Delete This Transaction!'
+      });
+
+      if (confirmed) {
         await api.transactions.delete(id);
         dispatch(removeTransaction(id));
+        toast.success('Transaction Deleted Successfully!');
       }
     } catch (error) {
       console.error(error);

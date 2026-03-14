@@ -9,6 +9,8 @@ import AccountCard from './components/account-card';
 import Summary from './components/summary/summary';
 import { selectAccounts, selectAccountsLoading } from '@/redux/account/account.selectors';
 import { removeAccount } from '@/redux/account/account.slice';
+import { confirm } from '@/components/toasts/confirm/confirm';
+import toast from 'react-hot-toast';
 
 export default function AccountPage() {
   const [edit, setEdit] = useState<AccountBaseSchema | null>(null);
@@ -19,16 +21,20 @@ export default function AccountPage() {
   const dispatch = useAppDispatch();
 
   const handleDelete = useCallback(async (id: AccountBaseSchema["id"]) => {
-    if (window.confirm('Are You Sure You Want To Delete This Account!')) {
+    const confirmed = await confirm({
+      title: "Delete Account",
+      message: "Are You Sure You Want To Delete This Account!",
+    })
+    if (confirmed) {
       try {
         setLoading(true);
         await api.accounts.delete(id);
         dispatch(removeAccount(id));
-        window.alert('Deleted Successfully');
+        toast.success('Account deleted successfully.');
       } catch (error: any) {
         console.error(error);
         if (error.message) {
-          window.alert(error.message);
+          toast.error(error.message);
         }
       } finally {
         setLoading(false);
@@ -42,7 +48,7 @@ export default function AccountPage() {
       <Form account={edit} onUpdated={() => setEdit(null)} />
 
       <Summary />
-      
+
       <ul className="sortable-list list-group p-3 mb-4">
         {accounts.map((tag) => (
           <AccountCard

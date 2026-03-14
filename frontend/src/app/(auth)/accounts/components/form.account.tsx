@@ -4,6 +4,7 @@ import { useAppDispatch } from '@/redux/hooks';
 import { api } from '@/api';
 import type { AccountBaseSchema } from '@/schemas/accounts/base.schema';
 import { addAccount, updateAccount } from '@/redux/account/account.slice';
+import toast from 'react-hot-toast';
 
 type FormProps = {
   account: AccountBaseSchema | null;
@@ -42,9 +43,11 @@ function Form({ account, onUpdated }: FormProps) {
           id: data.id,
           changes: data
         }));
+        toast.success('Account updated successfully.');
       } else {
         const data = await api.accounts.add({ name });
         dispatch(addAccount(data));
+        toast.success('Account added successfully.');
       }
 
       handleReset();
