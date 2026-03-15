@@ -1,6 +1,7 @@
 import { SummaryContainer } from "@/components/summary/summary";
 import { useAppSelector } from "@/redux/hooks";
 import { selectTags } from "@/redux/tag/tag.selectors";
+import formatAmount from "@/utils/format-amount";
 
 export default function Summary() {
   const tags = useAppSelector(selectTags);
@@ -23,11 +24,11 @@ export default function Summary() {
     <SummaryContainer>
       <li>
         <p>Total Balance</p>
-        <h2 className='text-success'>₹{summary.total}</h2>
+        <h2 className='text-success'>{formatAmount(summary.total)}</h2>
       </li>
       <li className='text-danger'>
         <p>Negative Balance</p>
-        <h2>₹{summary.negative}</h2>
+        <h2>₹{Math.abs(summary.negative)}</h2>
       </li>
       <li className='text-success'>
         <p>Positive Balance</p>

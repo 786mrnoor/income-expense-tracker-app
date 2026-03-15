@@ -4,6 +4,7 @@ import type { AccountBaseSchema } from '@/schemas/accounts/base.schema';
 import { memo } from 'react';
 import Dropdown from '@/components/dropdown/dropdown';
 import Dots from '@/components/icons/dots';
+import formatAmount from '@/utils/format-amount';
 
 type AccountProps = {
   data: AccountBaseSchema;
@@ -26,7 +27,7 @@ function Account({ data, isEditing, onRefreshBalance, onEdit, onDelete }: Accoun
       <h2
         className={`fs-5 ${data.balance >= 0 ? 'text-success' : 'text-danger'}`}
       >
-        {data.balance >= 0 ? '+' : '-'} ₹{Math.abs(data.balance)}
+        {formatAmount(data.balance)}
       </h2>
       <Dropdown>
         <Dropdown.ToggleButton className={styles.dropdownToggle}><Dots /></Dropdown.ToggleButton>
