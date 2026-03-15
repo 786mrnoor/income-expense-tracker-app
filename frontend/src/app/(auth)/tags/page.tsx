@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-
 import TagCard from './components/tag-card';
 import Form from './components/form.tag';
 import Loader from '@/components/loader';
@@ -8,7 +7,7 @@ import { type TagBaseSchema } from '@/schemas/tags/base.schema';
 import { api } from '@/api';
 import Summary from './components/summary/summary';
 import { selectTags, selectTagsLoading } from '@/redux/tag/tag.selectors';
-import { removeTag } from '@/redux/tag/tag.slice';
+import { removeTag, setTag } from '@/redux/tag/tag.slice';
 import { confirm } from '@/components/toasts/confirm/confirm';
 import toast from 'react-hot-toast';
 
@@ -43,6 +42,22 @@ export default function TagPage() {
     }
   }, []);
 
+  const handleRefreshBalance = useCallback(async (id: TagBaseSchema["id"]) => {
+    try {
+      setLoading(true);
+      const tag = await api.tags.getById(id);
+      dispatch(setTag(tag));
+      toast.success('Tag balance refreshed successfully.');
+    } catch (error: any) {
+      console.error(error);
+      if (error.message) {
+        toast.error(error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   return (
     <div className="my-container">
       <Loader show={loading || tagLoading} />
@@ -55,6 +70,7 @@ export default function TagPage() {
           <TagCard
             key={tag.id}
             data={tag} isEditing={tag.id === edit?.id}
+            onRefreshBalance={handleRefreshBalance}
             onEdit={setEdit}
             onDelete={handleDelete}
           ></TagCard>

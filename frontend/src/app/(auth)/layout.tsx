@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useAppDispatch } from "@/redux/hooks";
 import { fetchAccountList } from "@/redux/account/account.thunk";
 import { fetchTagList } from "@/redux/tag/tags.thunk";
-import { Toaster } from "react-hot-toast";
 
 export default function AuthLayout() {
   const dispatch = useAppDispatch();
@@ -17,7 +16,6 @@ export default function AuthLayout() {
 
   return (
     <>
-      <Toaster />
       <Nav />
       {/* <Total /> */}
       <Outlet />

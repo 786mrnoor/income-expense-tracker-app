@@ -3,7 +3,7 @@ import type { TagBaseSchema } from '@/schemas/tags/base.schema';
 import React, { useState } from 'react';
 import { useAppDispatch } from '@/redux/hooks';
 import { api } from '@/api';
-import { addTag, updateTag } from '@/redux/tag/tag.slice';
+import { addTag, setTag } from '@/redux/tag/tag.slice';
 import toast from 'react-hot-toast';
 
 type FormProps = {
@@ -39,10 +39,7 @@ function Form({ tag, onUpdated }: FormProps) {
 
       if (tag) {
         const data = await api.tags.update(tag.id, { name });
-        dispatch(updateTag({
-          id: data.id,
-          changes: data
-        }));
+        dispatch(setTag(data));
         toast.success('Tag updated successfully.');
       } else {
         const data = await api.tags.add({ name });

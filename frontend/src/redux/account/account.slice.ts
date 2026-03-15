@@ -7,7 +7,7 @@ export const accountSlice = createSlice({
   initialState: accountInitialState,
   reducers: {
     addAccount: accountAdaptor.addOne,
-    updateAccount: accountAdaptor.updateOne,
+    setAccount: accountAdaptor.setOne,
     removeAccount: accountAdaptor.removeOne
   },
   extraReducers: (builder) => {
@@ -23,5 +23,5 @@ export const accountSlice = createSlice({
   },
 });
 
-export const { addAccount, updateAccount, removeAccount } = accountSlice.actions;
+export const { addAccount, setAccount, removeAccount } = accountSlice.actions;
 export const accountReducer = accountSlice.reducer;

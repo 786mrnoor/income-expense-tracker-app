@@ -7,7 +7,7 @@ export const tagSlice = createSlice({
   initialState: tagsInitialState,
   reducers: {
     addTag: tagAdaptor.addOne,
-    updateTag: tagAdaptor.updateOne,
+    setTag: tagAdaptor.setOne,
     removeTag: tagAdaptor.removeOne
   },
   extraReducers: (builder) => {
@@ -23,5 +23,5 @@ export const tagSlice = createSlice({
   },
 });
 
-export const { addTag, updateTag, removeTag } = tagSlice.actions;
+export const { addTag, setTag, removeTag } = tagSlice.actions;
 export const tagReducer = tagSlice.reducer;

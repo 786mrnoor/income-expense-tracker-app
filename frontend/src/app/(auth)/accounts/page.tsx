@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-
 import Loader from '@/components/loader';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Form from './components/form.account';
@@ -8,7 +7,7 @@ import type { AccountBaseSchema } from '@/schemas/accounts/base.schema';
 import AccountCard from './components/account-card';
 import Summary from './components/summary/summary';
 import { selectAccounts, selectAccountsLoading } from '@/redux/account/account.selectors';
-import { removeAccount } from '@/redux/account/account.slice';
+import { removeAccount, setAccount } from '@/redux/account/account.slice';
 import { confirm } from '@/components/toasts/confirm/confirm';
 import toast from 'react-hot-toast';
 
@@ -40,7 +39,23 @@ export default function AccountPage() {
         setLoading(false);
       }
     }
-  }, [])
+  }, []);
+
+  const handleRefreshBalance = useCallback(async (id: AccountBaseSchema["id"]) => {
+    try {
+      setLoading(true);
+      const account = await api.accounts.getById(id);
+      dispatch(setAccount(account));
+      toast.success('Account balance refreshed successfully.');
+    } catch (error: any) {
+      console.error(error);
+      if (error.message) {
+        toast.error(error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   return (
     <div className="my-container">
@@ -55,6 +70,7 @@ export default function AccountPage() {
             key={tag.id}
             data={tag}
             isEditing={tag.id === edit?.id}
+            onRefreshBalance={handleRefreshBalance}
             onEdit={setEdit}
             onDelete={handleDelete}
           />

@@ -56,10 +56,10 @@ export function TransactionCard({ data, tagName, accountName }: TransactionCardP
         </div>
       </div>
       <Dropdown>
-        <Dropdown.ToggleButton className={styles.dropdownToggle}><Dots /></Dropdown.ToggleButton>
+        <Dropdown.ToggleButton><Dots /></Dropdown.ToggleButton>
         <Dropdown.DropdownMenu>
           <Dropdown.DropdownItem onClick={() => navigate(`/edit-transaction/${data.id}`)}>Edit</Dropdown.DropdownItem>
-          <Dropdown.DropdownItem onClick={() => deleteTransaction(data.id)}>Delete</Dropdown.DropdownItem>
+          <Dropdown.DropdownItem className='text-danger' onClick={() => deleteTransaction(data.id)}>Delete</Dropdown.DropdownItem>
         </Dropdown.DropdownMenu>
       </Dropdown>
     </div>

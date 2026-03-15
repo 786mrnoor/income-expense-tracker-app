@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useAppDispatch } from '@/redux/hooks';
 import { api } from '@/api';
 import type { AccountBaseSchema } from '@/schemas/accounts/base.schema';
-import { addAccount, updateAccount } from '@/redux/account/account.slice';
+import { addAccount, setAccount } from '@/redux/account/account.slice';
 import toast from 'react-hot-toast';
 
 type FormProps = {
@@ -39,10 +39,7 @@ function Form({ account, onUpdated }: FormProps) {
 
       if (account) {
         const data = await api.accounts.update(account.id, { name });
-        dispatch(updateAccount({
-          id: data.id,
-          changes: data
-        }));
+        dispatch(setAccount(data));
         toast.success('Account updated successfully.');
       } else {
         const data = await api.accounts.add({ name });
