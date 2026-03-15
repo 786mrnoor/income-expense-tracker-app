@@ -11,6 +11,7 @@ export default async function getAllTransactionService(userId: UserBaseSchema["i
   const filter = {
     ...(query.type && { type: query.type }),
     ...(query.status && { status: query.status }),
+    ...(query.method && { method: query.method }),
     ...(query.tagId && { tagId: query.tagId }),
     ...(query.accountId && { accountId: query.accountId }),
 
