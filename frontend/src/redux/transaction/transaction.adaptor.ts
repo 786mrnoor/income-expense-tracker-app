@@ -6,7 +6,7 @@ type TransactionStatus = {
 }
 
 export const transactionAdaptor = createEntityAdapter<TransactionBaseSchema>({
-  sortComparer: (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  sortComparer: (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 });
 
 export const transactionInitialState = transactionAdaptor.getInitialState<TransactionStatus>({ status: "loading" });
