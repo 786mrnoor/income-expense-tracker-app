@@ -7,6 +7,7 @@ export type GetTransactionRequestQuery = {
   toDate: string;
   type?: TransactionBaseSchema["type"];
   status?: TransactionBaseSchema["status"];
+  method?: TransactionBaseSchema["method"];
   tagId?: TransactionBaseSchema["tagId"];
   accountId?: TransactionBaseSchema["accountId"];
 }

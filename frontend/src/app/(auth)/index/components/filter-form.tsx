@@ -27,6 +27,7 @@ export default function FilterForm() {
         toDate: formData.toDate,
         type: formData.transactionType,
         status: formData.status,
+        method: formData.method,
         tagId: formData.tagId,
         accountId: formData.accountId
       });
@@ -71,6 +72,18 @@ export default function FilterForm() {
           <option value="pending">Pending</option>
         </select>
         <div className="invalid-feedback">{errors?.status?.message}</div>
+      </div>
+
+      <div className="input-group input-group-sm has-validation">
+        <span className="input-group-text">Method</span>
+        <select className={inputClass(errors?.method?.message, 'select')} {...register('method')}>
+          <option value=''>All</option>
+          <option value='cash'>CASH</option>
+          <option value='upi'>UPI</option>
+          <option value='card'>CARD</option>
+          <option value='bank'>BANK</option>
+        </select>
+        <div className="invalid-feedback">{errors?.method?.message}</div>
       </div>
 
       <div className="input-group input-group-sm has-validation">

@@ -67,12 +67,13 @@ export default function TransactionForm({ onSubmit, transaction }: TransactionFo
         <div className="input-group input-group-sm has-validation">
           <label htmlFor="method" className="input-group-text">Method</label>
           <select className={inputClass(errors?.method?.message, 'select')} {...register('method')}>
+            <option value=''>--select--</option>
             <option value='cash'>CASH</option>
             <option value='upi'>UPI</option>
             <option value='card'>CARD</option>
             <option value='bank'>BANK</option>
           </select>
-          <div className="invalid-feedback">{errors?.amount?.message}</div>
+          <div className="invalid-feedback">{errors?.method?.message}</div>
         </div>
 
         <div className="input-group input-group-sm has-validation">

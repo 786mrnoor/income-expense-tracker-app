@@ -7,6 +7,7 @@ export const filterFormSchema = z.object({
   toDate: emptyStringToUndefined(z.iso.date("Enter a valid date")),
   transactionType: emptyStringToUndefined(transactionBaseSchema.shape.type.optional()),
   status: emptyStringToUndefined(transactionBaseSchema.shape.status.optional()),
+  method: emptyStringToUndefined(transactionBaseSchema.shape.method.optional()),
   tagId: emptyStringToUndefined(transactionBaseSchema.shape.tagId.optional()),
   accountId: emptyStringToUndefined(transactionBaseSchema.shape.accountId.optional()),
 }).refine(
