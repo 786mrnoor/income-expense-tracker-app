@@ -39,6 +39,11 @@ export function getDefaultValues() {
   return {
     fromDate: yesterday(),
     toDate: today(),
+    transactionType: '',
+    status: '',
+    method: '',
+    tagId: '',
+    accountId: ''
   };
 }
 export const DEFAULT_VALUES = getDefaultValues();
