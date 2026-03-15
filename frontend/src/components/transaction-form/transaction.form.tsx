@@ -22,6 +22,7 @@ export default function TransactionForm({ onSubmit, transaction }: TransactionFo
 
   async function onValid(formData: TransactionFormData) {
     try {
+      formData.date = new Date(formData.date).toISOString();
       const shouldReset = await onSubmit(formData);
       if (shouldReset) {
         reset(getDefaultValues());
