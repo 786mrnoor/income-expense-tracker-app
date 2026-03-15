@@ -24,7 +24,7 @@ export default function Summary() {
     <SummaryContainer>
       <li>
         <p>Total Balance</p>
-        <h2 className='text-success'>{formatAmount(summary.total)}</h2>
+        <h2 className={summary.total >= 0 ? 'text-success' : 'text-danger'}>{formatAmount(summary.total)}</h2>
       </li>
       <li className='text-danger'>
         <p>Negative Balance</p>
