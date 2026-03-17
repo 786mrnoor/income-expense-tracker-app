@@ -1,6 +1,7 @@
 import z from "zod";
 import { transactionBaseSchema } from "@/schemas/transactions/base.schema";
 import { emptyStringToUndefined } from "@/schemas/common.schema";
+import { toDateString } from "@/utils/date";
 
 export const filterFormSchema = z.object({
   fromDate: emptyStringToUndefined(z.iso.date("Enter a valid date")),
@@ -21,24 +22,12 @@ export const filterFormSchema = z.object({
 export type FilterFormIinput = z.input<typeof filterFormSchema>;
 export type FilterFormData = z.output<typeof filterFormSchema>;
 
-const yesterday = () => {
-  const now = new Date();
-  now.setDate(now.getDate() - 1);
-  const offset = now.getTimezoneOffset();
-  const local = new Date(now.getTime() - offset * 60 * 1000);
-  return local.toISOString().slice(0, 10);
-}
-const today = () => {
-  const now = new Date();
-  const offset = now.getTimezoneOffset();
-  const local = new Date(now.getTime() - offset * 60 * 1000);
-  return local.toISOString().slice(0, 10);
-}
-
 export function getDefaultValues() {
+  const today = toDateString(new Date());
+
   return {
-    fromDate: yesterday(),
-    toDate: today(),
+    fromDate: today,
+    toDate: today,
     transactionType: '',
     status: '',
     method: '',

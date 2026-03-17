@@ -8,6 +8,7 @@ import { api } from '@/api';
 import { selectTags } from '@/redux/tag/tag.selectors';
 import { selectAccounts } from '@/redux/account/account.selectors';
 import { setTransactions } from '@/redux/transaction/transaction.slice';
+import { toLocalDate } from '@/utils/date';
 
 export default function FilterForm() {
   const tags = useAppSelector(selectTags);
@@ -23,8 +24,8 @@ export default function FilterForm() {
   async function onSubmit(formData: FilterFormData) {
     try {
       const data = await api.transactions.getAll({
-        fromDate: new Date(formData.fromDate).toISOString(),
-        toDate: new Date(formData.toDate).toISOString(),
+        fromDate: toLocalDate(formData.fromDate).toISOString(),
+        toDate: toLocalDate(formData.toDate).toISOString(),
         type: formData.transactionType,
         status: formData.status,
         method: formData.method,
