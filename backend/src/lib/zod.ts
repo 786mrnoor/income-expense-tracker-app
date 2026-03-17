@@ -13,8 +13,3 @@ export const emptyStringToUndefined = <T extends z.ZodTypeAny>(schema: T) =>
     if (value === "") return undefined;
     return value;
   }, schema);
-
-export function parseLocalDate(dateStr: string) {
-  const [y, m, d] = dateStr.split("-").map(Number);
-  return new Date(y, m - 1, d);
-}
