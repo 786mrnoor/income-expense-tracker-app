@@ -5,7 +5,6 @@ export async function connectDB() {
     await mongoose.connect(process.env.MONGO_URI!);
 
     mongoose.set('autoIndex', false);
-    mongoose.set('debug', true)
   } catch (error) {
     console.log(error);
     process.exit(1);

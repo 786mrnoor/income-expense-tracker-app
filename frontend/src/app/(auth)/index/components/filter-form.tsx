@@ -22,10 +22,13 @@ export default function FilterForm() {
 
 
   async function onSubmit(formData: FilterFormData) {
+    const toDate = toLocalDate(formData.toDate);
+    toDate.setHours(23, 59, 59, 999);
+
     try {
       const data = await api.transactions.getAll({
         fromDate: toLocalDate(formData.fromDate).toISOString(),
-        toDate: toLocalDate(formData.toDate).toISOString(),
+        toDate: toDate.toISOString(),
         type: formData.transactionType,
         status: formData.status,
         method: formData.method,
