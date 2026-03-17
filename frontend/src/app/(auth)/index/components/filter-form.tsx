@@ -23,8 +23,8 @@ export default function FilterForm() {
   async function onSubmit(formData: FilterFormData) {
     try {
       const data = await api.transactions.getAll({
-        fromDate: formData.fromDate,
-        toDate: formData.toDate,
+        fromDate: new Date(formData.fromDate).toISOString(),
+        toDate: new Date(formData.toDate).toISOString(),
         type: formData.transactionType,
         status: formData.status,
         method: formData.method,
