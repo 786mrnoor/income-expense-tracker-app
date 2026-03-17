@@ -9,9 +9,6 @@ console.log(userTimeZone);
 export default async function getAllTransactionService(userId: UserBaseSchema["id"], query: GetAllTransactionSchema['query']) {
   console.log(query);
 
-  query.fromDate.setHours(0, 0, 0, 0);
-  query.toDate.setHours(23, 59, 59, 999);
-
   const filter = {
     ...(query.type && { type: query.type }),
     ...(query.status && { status: query.status }),
