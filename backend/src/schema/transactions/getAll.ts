@@ -4,8 +4,8 @@ import { transactionBaseSchema } from "./base.js";
 
 export const getAllTransactionSchema = z.object({
   query: z.object({
-    fromDate: emptyStringToUndefined(z.iso.datetime("Enter a valid date").transform(val => new Date(val))),
-    toDate: emptyStringToUndefined(z.iso.datetime("Enter a valid date").transform((val) => new Date(val))),
+    fromDate: emptyStringToUndefined(z.coerce.date("Enter a valid date")),
+    toDate: emptyStringToUndefined(z.coerce.date("Enter a valid date")),
     type: emptyStringToUndefined(transactionBaseSchema.shape.type.optional()),
     status: emptyStringToUndefined(transactionBaseSchema.shape.status.optional()),
     method: emptyStringToUndefined(transactionBaseSchema.shape.method.optional()),
