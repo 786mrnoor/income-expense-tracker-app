@@ -12,7 +12,7 @@ export default function AuthLayout() {
     dispatch(fetchAccountList());
     dispatch(fetchTagList());
 
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
