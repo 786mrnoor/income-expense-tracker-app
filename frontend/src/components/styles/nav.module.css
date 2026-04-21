@@ -1,13 +1,29 @@
-.topNav {
+.topHeader {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  column-gap: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-bottom: 7px;
-  padding: 0 3%;
+  padding: 0.5rem;
   position: relative;
-  /* background-color: #1d5c88; */
-  height: 70px;
+
+  .hamburgerMenuButton {
+    border: 1px solid #dee2e6;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    outline: transparent;
+    background: transparent;
+
+    input {
+      display: none;
+    }
+
+    svg {
+      width: 32px;
+      aspect-ratio: 1;
+    }
+  }
 
   img {
     height: 50px;
@@ -17,5 +33,37 @@
     border: 2px solid white;
     object-fit: cover;
     margin-left: auto;
+  }
+
+  &:has(input:checked) .topNav {
+    display: flex;
+  }
+}
+
+.topNav {
+  display: none;
+  align-items: stretch;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+
+  a{
+    font-size: .875rem;
+    text-align: left;
+  }
+}
+
+@media (width > 600px) {
+  .topHeader {
+    .hamburgerMenuButton {
+      display: none;
+    }
+  }
+
+  .topNav {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    order: -1;
   }
 }

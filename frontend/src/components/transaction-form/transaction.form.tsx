@@ -15,7 +15,7 @@ export default function TransactionForm({ onSubmit, transaction }: TransactionFo
   const tags = useAppSelector(selectTags);
   const accounts = useAppSelector(selectAccounts);
 
-  const { register, handleSubmit, reset, formState: { isSubmitting, errors } } = useForm<TransactionFormInput, any, TransactionFormData>({
+  const { register, handleSubmit, reset, formState: { isSubmitting, errors } } = useForm<TransactionFormInput, unknown, TransactionFormData>({
     defaultValues: transaction || DEFAULT_VALUES,
     resolver: zodResolver(transactionFormSchema),
   });
@@ -105,9 +105,9 @@ export default function TransactionForm({ onSubmit, transaction }: TransactionFo
 
         <div className="input-group input-group-sm has-validation">
           <label htmlFor="note" className="input-group-text">Note</label>
-          <input
-            type="text"
+          <textarea
             className={inputClass(errors?.note?.message)}
+            rows={5}
             {...register('note')}
           />
           <div className="invalid-feedback">{errors?.note?.message}</div>
