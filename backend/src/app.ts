@@ -6,6 +6,7 @@ import { globalErrorHandler } from './middleware/error.middleware.js';
 import { accountRouter } from './routes/accounts.routes.js';
 import { tagRouter } from './routes/tags.routes.js';
 import { transactionRouter } from './routes/transactions.routes.js';
+import { getHealthController } from './controllers/health.js';
 
 export const app = express();
 
@@ -24,3 +25,7 @@ app.use('/api/tags', tagRouter);
 app.use('/api/transactions', transactionRouter);
 
 app.use(globalErrorHandler);
+
+app.get("/health", getHealthController);
+
+app.all("/*path", (req, res) => res.status(404).json({ message: "Not Found" }));
