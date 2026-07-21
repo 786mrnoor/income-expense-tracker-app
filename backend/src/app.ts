@@ -7,8 +7,9 @@ import { accountRouter } from './routes/accounts.routes.js';
 import { tagRouter } from './routes/tags.routes.js';
 import { transactionRouter } from './routes/transactions.routes.js';
 import { getHealthController } from './controllers/health.js';
+import { connectDB } from './config/connectDB.js';
 
-export const app = express();
+const app = express();
 
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS;
 app.use(cors({
@@ -29,3 +30,13 @@ app.use(globalErrorHandler);
 app.get("/health", getHealthController);
 
 app.all("/*path", (req, res) => res.status(404).json({ message: "Not Found" }));
+
+
+await connectDB();
+const port = process.env.PORT ||3000;
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
+});
+
+export default app;
