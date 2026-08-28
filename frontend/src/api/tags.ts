@@ -23,10 +23,10 @@ export const tags = {
     response: createTagResponseSchema
   }),
 
-  update: (id: UpdateTagRequest["params"], body: UpdateTagRequest["body"]) => authFetch({
-    path: `/api/tags/${id}`,
+  update: (data: UpdateTagRequest) => authFetch({
+    path: `/api/tags/${data.params}`,
     method: 'PATCH',
-    body,
+    body: data.body,
     response: updateTagResponseSchema
   }),
 

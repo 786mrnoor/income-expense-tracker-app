@@ -1,23 +1,21 @@
-import Loader from '@/components/loader';
-import type { TagBaseSchema } from '@/schemas/tags/base.schema';
-import React, { useState } from 'react';
-import { useAppDispatch } from '@/redux/hooks';
-import { api } from '@/api';
-import { addTag, setTag } from '@/redux/tag/tag.slice';
-import toast from 'react-hot-toast';
+import Loader from "@/components/loader";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { useEdit, useSetEdit } from "../edit-context/edit.context";
+import { useMutation } from "@tanstack/react-query";
+import { tagsQueries } from "@/queries/tags";
 
-type FormProps = {
-  tag: TagBaseSchema | null;
-  onUpdated: () => void;
-}
-function Form({ tag, onUpdated }: FormProps) {
-  const [name, setName] = useState('');
+function Form() {
+  const tag = useEdit();
+  const setEdit = useSetEdit();
+
+  const addMutation = useMutation(tagsQueries.add);
+  const updateMutation = useMutation(tagsQueries.update);
+
+  const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
   const [previousTag, setPreviousTag] = useState(tag);
-
-  const dispatch = useAppDispatch();
 
   if (previousTag !== tag) {
     setPreviousTag(tag);
@@ -27,40 +25,50 @@ function Form({ tag, onUpdated }: FormProps) {
   }
 
   function handleReset() {
-    onUpdated();
-    setName('');
+    setEdit(null);
+    setName("");
   }
 
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      setLoading(true);
       setError(null);
 
       if (tag) {
-        const data = await api.tags.update(tag.id, { name });
-        dispatch(setTag(data));
-        toast.success('Tag updated successfully.');
+        await updateMutation.mutateAsync({
+          params: tag.id,
+          body: { name },
+        });
+        updateMutation.reset();
+        toast.success("Tag updated successfully.");
       } else {
-        const data = await api.tags.add({ name });
-        dispatch(addTag(data));
-        toast.success('Tag added successfully.');
+        await addMutation.mutateAsync({ name });
+        addMutation.reset();
+        toast.success("Tag added successfully.");
       }
 
       handleReset();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      let message = "Something went wrong.";
+      if (
+        error &&
+        typeof error === "object" &&
+        "message" in error &&
+        typeof error.message === "string"
+      )
+        message = error.message;
+
       console.error(error);
-      let message = error?.errors?.body?.name?.[0] || error?.message || 'Something went wrong.';
       setError(message);
-    } finally {
-      setLoading(false);
     }
-    return;
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-3 bg-body-secondary my-border-bottom">
-      <Loader show={loading} />
+    <form
+      onSubmit={handleSubmit}
+      className="p-3 bg-body-secondary my-border-bottom"
+    >
+      <Loader show={addMutation.isPending} />
       <div className="input-group">
         <span className="input-group-text">Name</span>
         <input
@@ -70,7 +78,7 @@ function Form({ tag, onUpdated }: FormProps) {
           className="form-control"
           required
         />
-        <button className="btn btn-primary">{tag ? 'Update' : 'Add'}</button>
+        <button className="btn btn-primary">{tag ? "Update" : "Add"}</button>
         {tag && (
           <button className="btn btn-danger" onClick={handleReset}>
             Reset
