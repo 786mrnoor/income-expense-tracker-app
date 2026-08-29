@@ -5,6 +5,7 @@
     },
     "my_backend": {
       "root": "backend/",
+      "build": "npm run build",
       "entrypoint": "dist/app.js"
     }
   },
