@@ -6,7 +6,8 @@
     },
     "backend": {
       "root": "backend",
-      "outputDirectory": "dist"
+      "outputDirectory": "dist",
+      "entrypoint": "src/app.ts"
     }
   },
   "rewrites": [
