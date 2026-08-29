@@ -2,8 +2,6 @@ import z from "zod";
 import { buildQuery } from "./build-query";
 import type { FetchConfig } from "./custom-fetch.types";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
 export async function customFetch<T extends z.ZodTypeAny>(
   config: FetchConfig<T>,
 ): Promise<z.infer<T>>;
@@ -12,7 +10,7 @@ export async function customFetch(config: FetchConfig): Promise<any>;
 export async function customFetch<T extends z.ZodTypeAny | undefined>(
   config: FetchConfig<T>,
 ) {
-  const url = BACKEND_URL + config.path + buildQuery(config.query);
+  const url = config.path + buildQuery(config.query);
 
   const res = await fetch(url, {
     ...config,
