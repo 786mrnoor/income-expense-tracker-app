@@ -30,10 +30,10 @@ export const transactions = {
     method: 'DELETE',
   }),
 
-  update: (id: TransactionBaseSchema["id"], body: CreateTransactionRequest) => authFetch({
-    path: `/api/transactions/${id}`,
+  update: (data: { id: TransactionBaseSchema["id"], body: CreateTransactionRequest }) => authFetch({
+    path: `/api/transactions/${data.id}`,
     method: 'PATCH',
-    body,
+    body: data.body,
     response: updateTransactionResponseSchema
   }),
 }

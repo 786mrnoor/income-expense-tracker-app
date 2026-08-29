@@ -1,27 +1,29 @@
 import useTitle from "@/hooks/use-title";
 import FilterForm from "./components/filter-form";
-import TransactionList from "../../../components/transaction-list/transaction.list";
-import Summary from "../../../components/transactions-summary/summary";
-import { useEffect } from "react";
-import { useAppDispatch } from "@/redux/hooks";
-import { removeAllTransactions } from "@/redux/transaction/transaction.slice";
+import { Suspense, useState } from "react";
+import { ErrorScreen } from "@/components/error-screen";
+import { QueryLoader } from "@/components/query-loder/QueryLoader";
+import type { FilterFormData } from "./components/filter-from.schema";
+import { TransactionList } from "./components/TransactionList";
 
 export default function Index() {
   useTitle();
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    return () => {
-      dispatch(removeAllTransactions());
-    }
-  }, []);
+  const [filter, setFilter] = useState<FilterFormData | null>(null);
 
   return (
-    <div className="my-container p-3 p-lg-4 index-page">
-      <FilterForm />
-      <hr />
-      <Summary />
-      <TransactionList />
-    </div>
+    <ErrorScreen>
+      <Suspense fallback={<QueryLoader />}>
+        <div className="my-container p-3 p-lg-4 index-page">
+          <FilterForm onFilter={(data) => setFilter(data)} />
+          <hr />
+
+          <ErrorScreen>
+            <Suspense fallback={<QueryLoader />}>
+              {filter && <TransactionList filter={filter} />}
+            </Suspense>
+          </ErrorScreen>
+        </div>
+      </Suspense>
+    </ErrorScreen>
   );
 }

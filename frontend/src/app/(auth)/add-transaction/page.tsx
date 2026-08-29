@@ -1,28 +1,31 @@
-import useTitle from '@/hooks/use-title';
-import AddTransactionForm from './form';
-import TransactionList from '../../../components/transaction-list/transaction.list';
-import Summary from '@/components/transactions-summary/summary';
-import { useAppDispatch } from '@/redux/hooks';
-import { useEffect } from 'react';
-import { removeAllTransactions } from '@/redux/transaction/transaction.slice';
+import useTitle from "@/hooks/use-title";
+import { AddTransactionForm } from "./components/form/form";
+import { Suspense, useState } from "react";
+import { ErrorScreen } from "@/components/error-screen";
+import type { TransactionBaseSchema } from "@/schemas/transactions/base.schema";
+import { TransactionsListing } from "@/components/transactions-listing";
 
 export default function AddTransactionPage() {
-  useTitle('Add Transaction');
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    return () => {
-      dispatch(removeAllTransactions());
-    }
-  }, []);
+  useTitle("Add Transaction");
+  const [transactions, setTransactions] = useState<TransactionBaseSchema[]>([]);
 
   return (
     <div className="my-container p-3 p-lg-4 index-page">
-      <h1 className='fs-2 text-center text-primary'>Add Transaction</h1>
-      <AddTransactionForm />
+      <h1 className="fs-2 text-center text-primary">Add Transaction</h1>
+      <AddTransactionForm
+        onAdded={(data) => setTransactions([...transactions, data])}
+      />
       <hr />
-      <Summary />
-      <TransactionList />
+
+      <ErrorScreen>
+        <Suspense>
+          <TransactionsListing
+            transactions={transactions.sort(
+              (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+            )}
+          />
+        </Suspense>
+      </ErrorScreen>
     </div>
   );
 }

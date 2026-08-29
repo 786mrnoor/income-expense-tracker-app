@@ -19,7 +19,7 @@ export default function DropdownMenu({ children }: { children: React.ReactNode }
     return () => {
       document.removeEventListener('click', hideDropdown);
     };
-  }, [show]);
+  }, [show, setShow]);
 
   if (!show) return null;
   return (

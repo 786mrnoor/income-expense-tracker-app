@@ -14,7 +14,7 @@ export function getDefaultValues(): TransactionFormInput {
   const now = new Date();
   const offset = now.getTimezoneOffset();
   const local = new Date(now.getTime() - offset * 60 * 1000);
-  let today = local.toISOString().slice(0, 16);
+  const today = local.toISOString().slice(0, 16);
 
   return {
     type: "income",

@@ -2,45 +2,36 @@ import { useForm } from 'react-hook-form';
 import styles from './filter.form.module.css'
 import { DEFAULT_VALUES, filterFormSchema, getDefaultValues, type FilterFormData, type FilterFormIinput } from './filter-from.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import Loader from '@/components/loader';
-import { api } from '@/api';
-import { selectTags } from '@/redux/tag/tag.selectors';
-import { selectAccounts } from '@/redux/account/account.selectors';
-import { setTransactions } from '@/redux/transaction/transaction.slice';
 import { toLocalDate } from '@/utils/date';
+import { useSuspenseQueries } from '@tanstack/react-query';
+import { tagsQueries } from '@/queries/tags';
+import { accountsQueries } from '@/queries/accounts';
 
-export default function FilterForm() {
-  const tags = useAppSelector(selectTags);
-  const accounts = useAppSelector(selectAccounts);
-  const dispatch = useAppDispatch();
+type FilterFormProps = {
+  onFilter: (data: FilterFormData) => void;
+};
 
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FilterFormIinput, any, FilterFormData>({
+export default function FilterForm({ onFilter }: FilterFormProps) {
+
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<FilterFormIinput, unknown, FilterFormData>({
     defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(filterFormSchema),
   });
-
 
   async function onSubmit(formData: FilterFormData) {
     const toDate = toLocalDate(formData.toDate);
     toDate.setHours(23, 59, 59, 999);
 
-    try {
-      const data = await api.transactions.getAll({
-        fromDate: toLocalDate(formData.fromDate).toISOString(),
-        toDate: toDate.toISOString(),
-        type: formData.transactionType,
-        status: formData.status,
-        method: formData.method,
-        tagId: formData.tagId,
-        accountId: formData.accountId
-      });
-      dispatch(setTransactions(data));
-      return data;
-    } catch (error) {
-      console.error(error);
-    }
+    onFilter({
+      ...formData,
+      fromDate: toLocalDate(formData.fromDate).toISOString(),
+      toDate: toDate.toISOString(),
+    })
   }
+
+  const [{ data: accounts }, { data: tags }] = useSuspenseQueries({
+    queries: [ accountsQueries.all, tagsQueries.all ]
+  });
 
   const inputClass = (error: string | undefined, type: 'text' | 'select' = 'text') => `${type === 'text' ? 'form-control' : 'form-select'} ${error ? 'is-invalid' : ''}`;
 
@@ -60,12 +51,12 @@ export default function FilterForm() {
 
       <div className="input-group input-group-sm has-validation">
         <span className="input-group-text">Type</span>
-        <select className={inputClass(errors?.transactionType?.message, 'select')} {...register('transactionType')}>
+        <select className={inputClass(errors?.type?.message, 'select')} {...register('type')}>
           <option value="">All</option>
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </select>
-        <div className="invalid-feedback">{errors?.transactionType?.message}</div>
+        <div className="invalid-feedback">{errors?.type?.message}</div>
       </div>
 
       <div className="input-group input-group-sm has-validation">
@@ -120,7 +111,6 @@ export default function FilterForm() {
         <button className="btn btn-sm btn-outline-primary" type="button" onClick={() => reset(getDefaultValues())}>Clear All</button>
         <button className="btn btn-sm btn-success" type="submit">Apply</button>
       </div>
-      <Loader show={isSubmitting} />
     </form>
   );
 }

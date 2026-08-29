@@ -3,17 +3,22 @@ import { useForm } from 'react-hook-form';
 import Loader from '../loader';
 import { DEFAULT_VALUES, getDefaultValues, transactionFormSchema, type TransactionFormData, type TransactionFormInput } from './form.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAppSelector } from '@/redux/hooks';
-import { selectTags } from '@/redux/tag/tag.selectors';
-import { selectAccounts } from '@/redux/account/account.selectors';
+import { useSuspenseQueries } from '@tanstack/react-query';
+import { tagsQueries } from '@/queries/tags';
+import { accountsQueries } from '@/queries/accounts';
+import toast from 'react-hot-toast';
 
 type TransactionFormProps = {
   onSubmit: (data: TransactionFormData) => Promise<boolean>;
   transaction?: TransactionFormInput;
 }
 export default function TransactionForm({ onSubmit, transaction }: TransactionFormProps) {
-  const tags = useAppSelector(selectTags);
-  const accounts = useAppSelector(selectAccounts);
+  const [{ data: tags }, { data: accounts }] = useSuspenseQueries({
+    queries: [
+      tagsQueries.all,
+      accountsQueries.all
+    ]
+  })
 
   const { register, handleSubmit, reset, formState: { isSubmitting, errors } } = useForm<TransactionFormInput, unknown, TransactionFormData>({
     defaultValues: transaction || DEFAULT_VALUES,
@@ -28,6 +33,11 @@ export default function TransactionForm({ onSubmit, transaction }: TransactionFo
         reset(getDefaultValues());
       }
     } catch (error) {
+      let message = 'something went wrong';
+      if(error instanceof Error){
+        message = error.message;
+      }
+      toast.error(message)
       console.error(error);
     }
   }
