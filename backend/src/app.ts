@@ -27,7 +27,7 @@ app.use('/api/transactions', transactionRouter);
 
 app.use(globalErrorHandler);
 
-app.get("/health", getHealthController);
+app.get("/api/health", getHealthController);
 
 app.all("/*path", (req, res) => res.status(404).json({ message: "Not Found" }));
 
