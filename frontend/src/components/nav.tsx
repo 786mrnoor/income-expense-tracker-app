@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 
 import styles from "./styles/nav.module.css";
 import Profile from "./profile";
 import BackButton from "./back-button";
+import { ErrorScreen } from "./error-screen";
 
 export default function Nav() {
   const { pathname } = useLocation();
@@ -52,7 +53,11 @@ export default function Nav() {
         </svg>
       </label>
       <img onClick={toggleProfileContainer} src={"/profile.png"} alt="logo" />
-      {showProfile && <Profile onCloseProfile={closeProfile} />}
+      <ErrorScreen>
+        <Suspense>
+          {showProfile && <Profile onCloseProfile={closeProfile} />}
+        </Suspense>
+      </ErrorScreen>
       <nav className={styles.topNav}>
         {pathname !== "/" && <BackButton />}
         <Link className="btn btn-dark" to="/">

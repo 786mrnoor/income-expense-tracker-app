@@ -1,18 +1,17 @@
 import { NavLink, useNavigate } from "react-router";
 import styles from './styles/profile.module.css'
-import { useGetUser } from "@/contexts/user.context";
-import { authFetch } from "@/lib/auth-fetch";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { usersQueries } from "@/queries/user";
 
 export default function Profile({ onCloseProfile }: { onCloseProfile: () => void }) {
-  const user = useGetUser();
+  const { data: user } = useSuspenseQuery(usersQueries.me);
+  const signoutMutation = useMutation(usersQueries.signout);
+
   const navigate = useNavigate();
 
   async function handleSignOut() {
     try {
-      await authFetch({
-        path: '/api/auth/logout',
-        method: 'POST',
-      });
+      await signoutMutation.mutateAsync();
 
       navigate('/login');
     } catch (error) {
