@@ -68,7 +68,7 @@ function Form() {
       onSubmit={handleSubmit}
       className="p-3 bg-body-secondary my-border-bottom"
     >
-      <Loader show={addMutation.isPending} />
+      <Loader show={addMutation.isPending || updateMutation.isPending} />
       <div className="input-group">
         <span className="input-group-text">Name</span>
         <input

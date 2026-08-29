@@ -1,82 +1,23 @@
-import { useCallback, useState } from 'react';
-import Loader from '@/components/loader';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import Form from './components/form.account';
-import { api } from '@/api';
-import type { AccountBaseSchema } from '@/schemas/accounts/base.schema';
-import AccountCard from './components/account-card';
-import Summary from './components/summary/summary';
-import { selectAccounts, selectAccountsLoading } from '@/redux/account/account.selectors';
-import { removeAccount, setAccount } from '@/redux/account/account.slice';
-import { confirm } from '@/components/toasts/confirm/confirm';
-import toast from 'react-hot-toast';
+import { ErrorScreen } from "@/components/error-screen";
+import Form from "./components/form.account";
+import { EditProvider } from "./edit-context/EditProvider";
+import { Suspense } from "react";
+import { QueryLoader } from "@/components/query-loder/QueryLoader";
+import { AccountListing } from "./components/account-listing/AccountListing";
 
 export default function AccountPage() {
-  const [edit, setEdit] = useState<AccountBaseSchema | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const accounts = useAppSelector(selectAccounts);
-  const accountLoading = useAppSelector(selectAccountsLoading);
-  const dispatch = useAppDispatch();
-
-  const handleDelete = useCallback(async (id: AccountBaseSchema["id"]) => {
-    const confirmed = await confirm({
-      title: "Delete Account",
-      message: "Are You Sure You Want To Delete This Account!",
-    })
-    if (confirmed) {
-      try {
-        setLoading(true);
-        await api.accounts.delete(id);
-        dispatch(removeAccount(id));
-        toast.success('Account deleted successfully.');
-      } catch (error: any) {
-        console.error(error);
-        if (error.message) {
-          toast.error(error.message);
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-  }, []);
-
-  const handleRefreshBalance = useCallback(async (id: AccountBaseSchema["id"]) => {
-    try {
-      setLoading(true);
-      const account = await api.accounts.getById(id);
-      dispatch(setAccount(account));
-      toast.success('Account balance refreshed successfully.');
-    } catch (error: any) {
-      console.error(error);
-      if (error.message) {
-        toast.error(error.message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, []);
 
   return (
-    <div className="my-container">
-      <Loader show={loading || accountLoading} />
-      <Form account={edit} onUpdated={() => setEdit(null)} />
+    <EditProvider>
+      <div className="my-container">
+        <Form />
 
-      <Summary />
-
-      <ul className="sortable-list list-group p-3 mb-4">
-        {accounts.map((tag) => (
-          <AccountCard
-            key={tag.id}
-            data={tag}
-            isEditing={tag.id === edit?.id}
-            onRefreshBalance={handleRefreshBalance}
-            onEdit={setEdit}
-            onDelete={handleDelete}
-          />
-
-        ))}
-      </ul>
-    </div>
+        <ErrorScreen title="Error Loading Account">
+          <Suspense fallback={<QueryLoader>Loading Accounts...</QueryLoader>}>
+            <AccountListing />
+          </Suspense>
+        </ErrorScreen>
+      </div>
+    </EditProvider>
   );
 }

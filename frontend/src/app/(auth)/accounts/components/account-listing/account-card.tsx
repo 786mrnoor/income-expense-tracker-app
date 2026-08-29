@@ -1,0 +1,53 @@
+import { formatDateTime } from "@/utils/format-datetime";
+import styles from "./account.module.css";
+import type { AccountBaseSchema } from "@/schemas/accounts/base.schema";
+import { memo } from "react";
+import Dropdown from "@/components/dropdown/dropdown";
+import Dots from "@/components/icons/dots";
+import formatAmount from "@/utils/format-amount";
+import { useEdit, useSetEdit } from "../../edit-context/edit.context";
+
+type AccountProps = {
+  data: AccountBaseSchema;
+  onDelete: (id: AccountBaseSchema["id"]) => void;
+};
+function Account({ data, onDelete }: AccountProps) {
+  const editAccount = useEdit();
+  const setEditAccount = useSetEdit();
+
+  return (
+    <li
+      className={`list-group-item ${styles.tagListItem} ${editAccount?.id === data.id ? " bg-info-subtle" : ""}`}
+    >
+      <div>
+        <p className="fw-bold m-0 lh-1">{data.name}</p>
+        <span className="my-fs-sm">{formatDateTime(data.updatedAt)}</span>
+      </div>
+      <h2
+        className={`fs-5 ${data.balance >= 0 ? "text-success" : "text-danger"}`}
+      >
+        {formatAmount(data.balance)}
+      </h2>
+      <Dropdown>
+        <Dropdown.ToggleButton className={styles.dropdownToggle}>
+          <Dots />
+        </Dropdown.ToggleButton>
+        <Dropdown.DropdownMenu>
+          <Dropdown.DropdownItem onClick={() => setEditAccount(data)}>
+            Edit
+          </Dropdown.DropdownItem>
+          <Dropdown.DropdownItem
+            className="text-danger"
+            onClick={() => onDelete(data.id)}
+          >
+            Delete
+          </Dropdown.DropdownItem>
+        </Dropdown.DropdownMenu>
+      </Dropdown>
+    </li>
+  );
+}
+
+const AccountCard = memo(Account);
+
+export default AccountCard;

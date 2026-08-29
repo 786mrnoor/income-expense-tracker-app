@@ -1,0 +1,39 @@
+import { SummaryContainer } from "@/components/summary/summary";
+import type { AccountBaseSchema } from "@/schemas/accounts/base.schema";
+import formatAmount from "@/utils/format-amount";
+
+type SummaryProps = {
+  accounts: AccountBaseSchema[];
+};
+export default function Summary({ accounts }: SummaryProps) {
+  const summary = accounts.reduce(
+    (acc, item) => {
+      acc.total += item.balance;
+
+      if (item.balance > 0) acc.positive += item.balance;
+      else acc.negative += item.balance;
+
+      return acc;
+    },
+    { total: 0, positive: 0, negative: 0 },
+  );
+
+  return (
+    <SummaryContainer>
+      <li>
+        <p>Total Balance</p>
+        <h2 className={summary.total >= 0 ? "text-success" : "text-danger"}>
+          {formatAmount(summary.total)}
+        </h2>
+      </li>
+      <li className="text-danger">
+        <p>Negative Balance</p>
+        <h2>₹{Math.abs(summary.negative)}</h2>
+      </li>
+      <li className="text-success">
+        <p>Positive Balance</p>
+        <h2>₹{summary.positive}</h2>
+      </li>
+    </SummaryContainer>
+  );
+}

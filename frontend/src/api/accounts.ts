@@ -23,10 +23,10 @@ export const accounts = {
     response: createAccountResponseSchema
   }),
 
-  update: (id: UpdateAccountRequest["params"], body: UpdateAccountRequest["body"]) => authFetch({
-    path: `/api/accounts/${id}`,
+  update: (data: UpdateAccountRequest) => authFetch({
+    path: `/api/accounts/${data.params}`,
     method: 'PATCH',
-    body,
+    body: data.body,
     response: updateAccountResponseSchema
   }),
 
