@@ -7,9 +7,14 @@ import { useCallback } from "react";
 import type { TagBaseSchema } from "@/schemas/tags/base.schema";
 import { confirm } from "@/components/toasts/confirm/confirm";
 import toast from "react-hot-toast";
+import { RefreshCw } from "@/components/icons/RefreshCw";
 
 function TagListing() {
-  const { data: tags } = useSuspenseQuery(tagsQueries.all);
+  const {
+    data: tags,
+    refetch,
+    isRefetching,
+  } = useSuspenseQuery(tagsQueries.all);
 
   const { mutateAsync, isPending } = useMutation(tagsQueries.delete);
 
@@ -37,11 +42,32 @@ function TagListing() {
     [mutateAsync],
   );
 
+  async function handleRefetch() {
+    const res = await refetch();
+    if (res.isSuccess) {
+      toast.success("Tags refetched successfully");
+    }
+    if (res.isError) {
+      toast.error(res.error.message);
+    }
+  }
+
   return (
     <>
-      <Loader show={isPending} />
+      <Loader show={isPending || isRefetching} />
 
       <Summary tags={tags} />
+
+      <div className="flex justify-end mx-4">
+        <button
+          className="btn btn-primary"
+          type="button"
+          onClick={handleRefetch}
+        >
+          <RefreshCw className="inline-block mr-2" />
+          Refresh
+        </button>
+      </div>
 
       <ul className="sortable-list list-group p-3 mb-4">
         {tags.map((tag) => (
