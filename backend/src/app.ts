@@ -31,12 +31,6 @@ app.get("/api/health", getHealthController);
 
 app.all("/*path", (req, res) => res.status(404).json({ message: "Not Found" }));
 
-
-await connectDB();
-const port = process.env.PORT ||3000;
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
-});
+connectDB();
 
 export default app;

@@ -1,17 +1,16 @@
 {
-  "services": {
-    "my_frontend": {
-      "root": "frontend/"
-    },
-    "my_backend": {
-      "root": "backend/",
-      "buildCommand": "npm run build",
-      "outputDirectory": "dist",
-      "entrypoint": "dist/app.js"
-    }
-  },
+  "version": 2,
+  "installCommand": "npm run installCommand",
+  "buildCommand": "npm run build",
+  "outputDirectory": "frontend/dist",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": { "service": "my_backend" } },
-    { "source": "/(.*)", "destination": { "service": "my_frontend" } }
+    {
+      "source": "/api/:path*",
+      "destination": "/api"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }
