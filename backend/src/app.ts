@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { authRouter } from './routes/auth.routes.js';
 import { globalErrorHandler } from './middleware/error.middleware.js';
@@ -11,14 +10,13 @@ import { connectDB } from './config/connectDB.js';
 
 const app = express();
 
-const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS;
-app.use(cors({
-  origin: ALLOWED_ORIGINS?.split(','),
-  credentials: true,
-}));
-
 app.use(express.json());
 app.use(cookieParser());
+
+app.use( async(_, __, next)=>{
+  await connectDB();
+  next();
+});
 
 app.use('/api/auth', authRouter);
 app.use('/api/accounts', accountRouter);
@@ -30,7 +28,5 @@ app.use(globalErrorHandler);
 app.get("/api/health", getHealthController);
 
 app.all("/*path", (req, res) => res.status(404).json({ message: "Not Found" }));
-
-connectDB();
 
 export default app;
