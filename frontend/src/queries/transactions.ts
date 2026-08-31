@@ -28,26 +28,30 @@ export const transactionsQueries = {
 
   add: mutationOptions({
     mutationFn: transactions.add,
-    onSuccess: (data, _, __, ctx) => {
-      ctx.client.invalidateQueries({ queryKey: transactionsKeys.lists() });
-      ctx.client.setQueryData<TransactionBaseSchema[]>(
-        transactionsKeys.lists(),
-        (old = []) => [data, ...old],
-      );
+    onSuccess: (_, __, ___, ctx) => {
+      ctx.client.resetQueries({ queryKey: transactionsKeys.lists() });
     },
   }),
 
   update: mutationOptions({
     mutationFn: transactions.update,
     onSuccess: (data, _, __, ctx) => {
-      ctx.client.invalidateQueries({ queryKey: transactionsKeys.lists() });
-      ctx.client.invalidateQueries({
+      ctx.client.resetQueries({ queryKey: transactionsKeys.lists() });
+      ctx.client.resetQueries({
         queryKey: transactionsKeys.detail(data.id),
+        exact: true,
       });
-      ctx.client.setQueryData<TransactionBaseSchema[]>(
-        transactionsKeys.all,
-        (old = []) => old.map((t) => (t.id === data.id ? data : t)),
-      );
+    },
+  }),
+
+  delete: mutationOptions({
+    mutationFn: transactions.delete,
+    onSuccess: (_, id, __, ctx) => {
+      ctx.client.resetQueries({ queryKey: transactionsKeys.lists() });
+      ctx.client.resetQueries({
+        queryKey: transactionsKeys.detail(id),
+        exact: true,
+      });
     },
   }),
 };

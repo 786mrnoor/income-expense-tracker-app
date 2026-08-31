@@ -2,6 +2,7 @@ import type { TransactionFormData } from "@/components/transaction-form/form.sch
 import TransactionForm from "@/components/transaction-form/transaction.form";
 import { transactionsQueries } from "@/queries/transactions";
 import { type TransactionBaseSchema } from "@/schemas/transactions/base.schema";
+import { formatInputDateTime } from "@/utils/format-datetime";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
@@ -23,12 +24,13 @@ function UpdateForm({ id }: UpdateFormProps) {
     return false;
   }
 
+
   return (
     <TransactionForm
       onSubmit={update}
       transaction={{
         ...data,
-        date: new Date(data.date).toISOString().slice(0, 16),
+        date: formatInputDateTime(new Date(data.date)),
       }}
     />
   );
