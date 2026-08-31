@@ -8,20 +8,26 @@ import Dropdown from "@/components/dropdown/dropdown";
 import Dots from "@/components/icons/dots";
 import { useNavigate } from "react-router";
 import { confirm } from "@/components/toasts/confirm/confirm";
+import { useMutation } from "@tanstack/react-query";
+import { transactionsQueries } from "@/queries/transactions";
+import toast from "react-hot-toast";
+import Loader from "@/components/loader";
 
 type TransactionCardProps = {
   data: TransactionBaseSchema;
   tagName: TagBaseSchema["name"];
   accountName: AccountBaseSchema["name"];
-  onDelete: (id: TransactionBaseSchema["id"]) => void;
+  onDeleted?: (id: TransactionBaseSchema["id"]) => void;
 };
 export function TransactionCard({
   data,
   tagName,
   accountName,
-  onDelete,
+  onDeleted,
 }: TransactionCardProps) {
   const navigate = useNavigate();
+
+  const { mutateAsync, isPending } = useMutation(transactionsQueries.delete);
 
   async function deleteTransaction() {
     try {
@@ -31,7 +37,9 @@ export function TransactionCard({
       });
 
       if (confirmed) {
-        onDelete(data.id);
+        await mutateAsync(data.id);
+        toast.success("Transaction Deleted Successfully!");
+        onDeleted?.(data.id);
       }
     } catch (error) {
       console.error(error);
@@ -79,6 +87,7 @@ export function TransactionCard({
           </Dropdown.DropdownItem>
         </Dropdown.DropdownMenu>
       </Dropdown>
+      <Loader show={isPending} />
     </div>
   );
 }

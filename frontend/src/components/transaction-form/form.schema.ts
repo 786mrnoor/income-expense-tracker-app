@@ -27,4 +27,3 @@ export function getDefaultValues(): TransactionFormInput {
     date: today,
   }
 }
-export const DEFAULT_VALUES: TransactionFormInput = getDefaultValues();

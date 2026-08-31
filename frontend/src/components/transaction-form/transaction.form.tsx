@@ -1,7 +1,7 @@
 import styles from './transaction.form.module.css';
 import { useForm } from 'react-hook-form';
 import Loader from '../loader';
-import { DEFAULT_VALUES, getDefaultValues, transactionFormSchema, type TransactionFormData, type TransactionFormInput } from './form.schema';
+import { getDefaultValues, transactionFormSchema, type TransactionFormData, type TransactionFormInput } from './form.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSuspenseQueries } from '@tanstack/react-query';
 import { tagsQueries } from '@/queries/tags';
@@ -21,7 +21,7 @@ export default function TransactionForm({ onSubmit, transaction }: TransactionFo
   })
 
   const { register, handleSubmit, reset, formState: { isSubmitting, errors } } = useForm<TransactionFormInput, unknown, TransactionFormData>({
-    defaultValues: transaction || DEFAULT_VALUES,
+    defaultValues: transaction || getDefaultValues(),
     resolver: zodResolver(transactionFormSchema),
   });
 

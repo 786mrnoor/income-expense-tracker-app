@@ -4,7 +4,6 @@ import { Pagination } from "../pagination/pagination";
 import { MemoizedTransactionCard } from "./components/transaction-card/transaction.card";
 import { useState } from "react";
 import { arrayToEntities } from "@/utils/array-to-entities";
-import toast from "react-hot-toast";
 import { useSuspenseQueries } from "@tanstack/react-query";
 import { accountsQueries } from "@/queries/accounts";
 import { tagsQueries } from "@/queries/tags";
@@ -13,10 +12,11 @@ const LIMIT_PER_PAGE = 30;
 
 type TransactionListProps = {
   transactions: TransactionBaseSchema[];
+  onDeleted?: (id: TransactionBaseSchema["id"]) => void;
 };
 
 function TransactionsListing({
-  transactions,
+  transactions, onDeleted
 }: TransactionListProps) {
   const [accountsQuery, tagsQuery] = useSuspenseQueries({
     queries: [accountsQueries.all, tagsQueries.all],
@@ -52,9 +52,7 @@ function TransactionsListing({
             data={transaction}
             tagName={tagsEntities[transaction.tagId]?.name}
             accountName={accountEntities[transaction.accountId]?.name}
-            onDelete={() => {
-              toast.success("Transaction Deleted Successfully!");
-            }}
+            onDeleted={onDeleted}
           />
         ))}
       </div>
